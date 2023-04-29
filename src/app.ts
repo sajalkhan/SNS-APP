@@ -4,9 +4,9 @@ import { ConnectDatabase } from './setupDatabase';
 import { config } from './config';
 
 class Application {
-  public initialize(): void {
+  public async initialize(): Promise<void> {
     this.loadConfig();
-    ConnectDatabase();
+    await ConnectDatabase();
     const app: Express = express();
     const server: SnsServer = new SnsServer(app);
     server.start();

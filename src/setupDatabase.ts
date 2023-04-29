@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 import { config } from './config';
+import Logger from 'bunyan';
+
+const log: Logger = config.createLogger('setupDatabase');
 
 export const ConnectDatabase = () => {
   const connect = async () => {
@@ -16,10 +19,10 @@ export const ConnectDatabase = () => {
           useUnifiedTopology: true
         })
         .then(() => {
-          console.log('Successfully Connected to database!');
+          log.info('Successfully Connected to database!');
         });
     } catch (error) {
-      console.error('Unable to connect to the mongodb instance. Error: ', error);
+      log.error('Unable to connect to the mongodb instance. Error: ', error);
       process.exit(1);
     }
   };

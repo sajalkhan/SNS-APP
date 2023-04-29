@@ -3,6 +3,7 @@ import http from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
 import hpp from 'hpp';
+import Logger from 'bunyan';
 import compression from 'compression';
 import cookieSession from 'cookie-session';
 import HTTP_STATUS from 'http-status-codes';
@@ -15,6 +16,8 @@ import applicationRoutes from './routes';
 import { CustomError, IErrorResponse } from './shared/globals/helpers/error-handler';
 
 const SERVER_PORT = 8000;
+const log: Logger = config.createLogger('setupServer');
+
 export class SnsServer {
   private app: Application;
 
@@ -68,7 +71,7 @@ export class SnsServer {
     });
 
     app.use((error: IErrorResponse, _req: Request, res: Response, next: NextFunction) => {
-      console.log(error);
+      log.error(error);
 
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json(error.serializeErrors());
@@ -84,7 +87,7 @@ export class SnsServer {
       this.socketIOConnections(socketIO);
       this.startHttpServer(httpServer);
     } catch (error) {
-      console.log(error);
+      log.error(error);
     }
   }
 
@@ -104,8 +107,10 @@ export class SnsServer {
   }
 
   private startHttpServer(httpServer: http.Server): void {
+    log.info(`Server has started with process ${process.pid}`);
+
     httpServer.listen(SERVER_PORT, () => {
-      console.log(`Server running on ${SERVER_PORT}`);
+      log.info(`Server running on ${SERVER_PORT}`);
     });
   }
 

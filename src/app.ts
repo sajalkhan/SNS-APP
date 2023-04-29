@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
-import { SnsServer } from './setupServer';
-import { ConnectDatabase } from './setupDatabase';
-import { config } from './config';
+import { config } from '@root/config';
+import { SnsServer } from '@root/setupServer';
+import { ConnectDatabase } from '@root/setupDatabase';
 
 class Application {
   public async initialize(): Promise<void> {

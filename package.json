@@ -4,10 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start:prod": "npm run build && nodemon build/app.js",
-    "start:dev": "nodemon -r tsconfig-paths/register src/app.ts | ./node_modules/.bin/bunyan",
+    "start": "npm run build && nodemon build/app.js",
+    "dev": "nodemon -r tsconfig-paths/register src/app.ts | ./node_modules/.bin/bunyan",
     "deploy": "npm run build && serverless deploy",
-    "build": "rimraf ./build && tsc",
+    "build": "rimraf ./build && tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "format": "prettier \"./**\" --write --ignore-unknown"
   },
   "keywords": [],
@@ -42,6 +42,9 @@
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.1",
     "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.2.0"
+    "tsc-alias": "^1.8.6",
+    "tsconfig-paths": "^4.2.0",
+    "ttypescript": "^1.5.15",
+    "typescript-transform-paths": "^3.4.6"
   }
 }

@@ -8,7 +8,9 @@
     "dev": "nodemon -r tsconfig-paths/register src/app.ts | ./node_modules/.bin/bunyan",
     "deploy": "npm run build && serverless deploy",
     "build": "rimraf ./build && tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
-    "format": "prettier \"./**\" --write --ignore-unknown"
+    "format": "prettier \"src/**/*.ts\" --write --ignore-unknown",
+    "lint:check": "eslint \"src/**/*.ts\"",
+    "lint:fix": "eslint \"src/**/*.ts\" --fix"
   },
   "keywords": [],
   "author": "",
@@ -41,6 +43,9 @@
     "@types/hpp": "^0.2.2",
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.1",
+    "eslint": "^8.39.0",
+    "eslint-config-prettier": "^8.8.0",
+    "prettier": "^2.8.8",
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.8.6",
     "tsconfig-paths": "^4.2.0",

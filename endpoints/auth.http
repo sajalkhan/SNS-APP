@@ -1,0 +1,29 @@
+// here we use Rest client vs code extension
+@baseUrl = http://localhost:8000
+@urlPath = api/v1
+
+###
+GET {{baseUrl}}/{{urlPath}}/signout
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+###
+GET {{baseUrl}}/{{urlPath}}/currentuser
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+###
+POST {{baseUrl}}/{{urlPath}}/signup
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{
+  "username": "sajal",
+  "password": "1234",
+  "email": "sajal@gmail.com",
+  "avatarColor": "red",
+  "avatarImage": "<add-a-base64-encoded-string>"
+}

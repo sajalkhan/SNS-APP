@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const mongoose = require('mongoose');
 import { config } from '@root/config';
 import Logger from 'bunyan';

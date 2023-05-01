@@ -14,6 +14,7 @@ import { BadRequestError } from '@global/helpers/error-handler';
 import { joiValidation } from '@global/decorators/joi-validation-decorator';
 import { IAuthDocument, ISignUpData } from '@auth/interfaces/auth.interface';
 import { authQueue } from '@service/queues/auth.queue';
+import { userQueue } from '@service/queues/user.queue';
 
 const userCache: UserCache = new UserCache();
 
@@ -52,6 +53,7 @@ export class SignUp {
     // Add to database
     omit(userDataForCache, ['uid', 'username', 'email', 'avatarColor', 'password']);
     authQueue.addAuthUserJob('addAuthUserToDB', { value: userDataForCache });
+    userQueue.addUserJob('addUserToDB', { value: userDataForCache });
 
     res.status(HTTP_STATUS.CREATED).json({ message: 'User created successfully', user: authData });
   }

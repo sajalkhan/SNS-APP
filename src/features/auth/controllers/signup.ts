@@ -2,6 +2,7 @@ import { ObjectId } from 'mongodb';
 import { Request, Response } from 'express';
 import HTTP_STATUS from 'http-status-codes';
 import { UploadApiResponse } from 'cloudinary';
+import { config } from '@root/config';
 import { Helpers } from '@global/helpers/helpers';
 import { UserCache } from '@service/redis/user.cache';
 import { authService } from '@service/db/auth.service';
@@ -43,7 +44,7 @@ export class SignUp {
 
     // Add to redis cache
     const userDataForCache: IUserDocument = this.userData(authData, userObjectId);
-    userDataForCache.profilePicture = `https://res.cloudinary.com/dyamr9ym3/image/upload/v${result.version}/SnsApp-profileImage/${userObjectId}`;
+    userDataForCache.profilePicture = `https://res.cloudinary.com/${config.CLOUD_NAME}/image/upload/v${result.version}/SnsApp-profileImage/${userObjectId}`;
     await userCache.saveUserToCache(`${userObjectId}`, uId, userDataForCache);
 
     res.status(HTTP_STATUS.CREATED).json({ message: 'User created successfully', user: authData });

@@ -1,14 +1,18 @@
 import { ObjectId } from 'mongodb';
 import { Request, Response } from 'express';
-import { joiValidation } from '@global/decorators/joi-validation-decorator';
-import { signupSchema } from '@auth/validation-schema/signup';
-import { IAuthDocument, ISignUpData } from '@auth/interfaces/auth.interface';
-import { authService } from '@service/db/auth.service';
-import { Helpers } from '@global/helpers/helpers';
-import { UploadApiResponse } from 'cloudinary';
-import { BadRequestError } from '@global/helpers/error-handler';
-import { uploads } from '@global/helpers/coludinary-upload';
 import HTTP_STATUS from 'http-status-codes';
+import { UploadApiResponse } from 'cloudinary';
+import { Helpers } from '@global/helpers/helpers';
+import { UserCache } from '@service/redis/user.cache';
+import { authService } from '@service/db/auth.service';
+import { uploads } from '@global/helpers/coludinary-upload';
+import { signupSchema } from '@auth/validation-schema/signup';
+import { IUserDocument } from '@user/interfaces/user.interface';
+import { BadRequestError } from '@global/helpers/error-handler';
+import { joiValidation } from '@global/decorators/joi-validation-decorator';
+import { IAuthDocument, ISignUpData } from '@auth/interfaces/auth.interface';
+
+const userCache: UserCache = new UserCache();
 
 export class SignUp {
   @joiValidation(signupSchema)
@@ -37,6 +41,11 @@ export class SignUp {
       throw new BadRequestError('File upload: Error occurred. Try again.');
     }
 
+    // Add to redis cache
+    const userDataForCache: IUserDocument = this.userData(authData, userObjectId);
+    userDataForCache.profilePicture = `https://res.cloudinary.com/dyamr9ym3/image/upload/v${result.version}/SnsApp-profileImage/${userObjectId}`;
+    await userCache.saveUserToCache(`${userObjectId}`, uId, userDataForCache);
+
     res.status(HTTP_STATUS.CREATED).json({ message: 'User created successfully', user: authData });
   }
 
@@ -51,5 +60,43 @@ export class SignUp {
       avatarColor,
       createdAt: new Date()
     } as IAuthDocument;
+  }
+
+  //we will store this user data to redis cache
+  private userData(data: IAuthDocument, userObjectId: ObjectId): IUserDocument {
+    const { _id, username, email, uId, password, avatarColor } = data;
+    return {
+      _id: userObjectId,
+      authId: _id,
+      uId,
+      username: Helpers.firstLetterUppercase(username),
+      email,
+      password,
+      avatarColor,
+      profilePicture: '',
+      blocked: [],
+      blockedBy: [],
+      work: '',
+      location: '',
+      school: '',
+      quote: '',
+      bgImageVersion: '',
+      bgImageId: '',
+      followersCount: 0,
+      followingCount: 0,
+      postsCount: 0,
+      notifications: {
+        messages: true,
+        reactions: true,
+        comments: true,
+        follows: true
+      },
+      social: {
+        facebook: '',
+        instagram: '',
+        twitter: '',
+        youtube: ''
+      }
+    } as unknown as IUserDocument;
   }
 }

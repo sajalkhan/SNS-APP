@@ -1,3 +1,4 @@
+import { omit } from 'lodash';
 import { ObjectId } from 'mongodb';
 import { Request, Response } from 'express';
 import HTTP_STATUS from 'http-status-codes';
@@ -12,6 +13,7 @@ import { IUserDocument } from '@user/interfaces/user.interface';
 import { BadRequestError } from '@global/helpers/error-handler';
 import { joiValidation } from '@global/decorators/joi-validation-decorator';
 import { IAuthDocument, ISignUpData } from '@auth/interfaces/auth.interface';
+import { authQueue } from '@service/queues/auth.queue';
 
 const userCache: UserCache = new UserCache();
 
@@ -46,6 +48,10 @@ export class SignUp {
     const userDataForCache: IUserDocument = this.userData(authData, userObjectId);
     userDataForCache.profilePicture = `https://res.cloudinary.com/${config.CLOUD_NAME}/image/upload/v${result.version}/SnsApp-profileImage/${userObjectId}`;
     await userCache.saveUserToCache(`${userObjectId}`, uId, userDataForCache);
+
+    // Add to database
+    omit(userDataForCache, ['uid', 'username', 'email', 'avatarColor', 'password']);
+    authQueue.addAuthUserJob('addAuthUserToDB', { value: userDataForCache });
 
     res.status(HTTP_STATUS.CREATED).json({ message: 'User created successfully', user: authData });
   }

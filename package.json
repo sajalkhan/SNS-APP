@@ -9,7 +9,7 @@
     "deploy": "npm run build && serverless deploy",
     "build": "rimraf ./build && tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "format": "prettier \"src/**/*.ts\" --write --ignore-unknown",
-    "lint:check": "eslint \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" --fix"
   },
   "keywords": [],

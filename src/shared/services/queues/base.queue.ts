@@ -4,9 +4,12 @@ import { config } from '@root/config';
 import { createBullBoard } from '@bull-board/api';
 import { ExpressAdapter } from '@bull-board/express';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
+import { IAuthJob } from '@auth/interfaces/auth.interface';
 
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;
+
+type IBaseJobData = IAuthJob;
 
 export abstract class BaseQueue {
   queue: Queue.Queue;
@@ -39,8 +42,7 @@ export abstract class BaseQueue {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  protected addJob(name: string, data: any): void {
+  protected addJob(name: string, data: IBaseJobData): void {
     this.queue.add(name, data, { attempts: 3, backoff: { type: 'fixed', delay: 5000 } });
   }
 

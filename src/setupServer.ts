@@ -114,5 +114,6 @@ export class SnsServer {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   private socketIOConnections(io: Server): void {}
 }

@@ -1,4 +1,3 @@
-import { omit } from 'lodash';
 import JWT from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
 import { Request, Response } from 'express';
@@ -52,8 +51,7 @@ export class SignUp {
     await userCache.saveUserToCache(`${userObjectId}`, uId, userDataForCache);
 
     // Add to database
-    omit(userDataForCache, ['uid', 'username', 'email', 'avatarColor', 'password']);
-    authQueue.addAuthUserJob('addAuthUserToDB', { value: userDataForCache });
+    authQueue.addAuthUserJob('addAuthUserToDB', { value: authData });
     userQueue.addUserJob('addUserToDB', { value: userDataForCache });
 
     const userJwt: string = this.signToken(authData, userObjectId);

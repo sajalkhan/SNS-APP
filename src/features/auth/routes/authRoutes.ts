@@ -1,5 +1,6 @@
 import { SignUp } from '@auth/controllers/signup';
 import { SignIn } from '@auth/controllers/signin';
+import { SignOut } from '@auth/controllers/signout';
 import express, { Router } from 'express';
 
 class AuthRoutes {
@@ -13,11 +14,11 @@ class AuthRoutes {
   private routes(): void {
     const signUp = new SignUp();
     const signIn = new SignIn();
+    const signOut = new SignOut();
 
     this.router.post('/signup', (req, res) => signUp.create(req, res));
-    this.router.post('/signin', (req, res) => signIn.read(req, res));
-
-    // other routes can be added here
+    this.router.get('/signin', (req, res) => signIn.read(req, res));
+    this.router.get('/signout', (req, res) => signOut.update(req, res));
   }
 
   public getRouter(): Router {

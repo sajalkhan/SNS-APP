@@ -17,7 +17,6 @@ class ResetPasswordTemplate {
 
     // Return the updated HTML content as a string
     return $.html();
-    return '';
   }
 }
 

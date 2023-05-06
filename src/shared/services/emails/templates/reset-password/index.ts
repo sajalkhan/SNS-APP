@@ -9,7 +9,7 @@ class ResetPasswordTemplate {
     const html = fs.readFileSync(__dirname + '/index.html', 'utf8');
     const $ = load(html);
 
-    // Update the username and reset link values in the HTML template
+    // Update necessary field value
     $('.reset-password__userName').text(username);
     $('.reset-password__email').text(email);
     $('.reset-password__ip').text(ipaddress);

@@ -16,6 +16,10 @@ class Config {
   public CLOUD_NAME: string | undefined;
   public CLOUD_API_KEY: string | undefined;
   public CLOUD_API_SECRET: string | undefined;
+  public EMAIL: string | undefined;
+  public MAIL_PASSWORD: string | undefined;
+  public SMTP_USER: string | undefined;
+  public SMTP_PASSWORD: string | undefined;
 
   private readonly DEFAULT_DATABASE_URL = `mongodb://sohrab:${this.DB_PASSWORD}@ac-9cnkrjh-shard-00-00.vba8ve3.mongodb.net:27017,ac-9cnkrjh-shard-00-01.vba8ve3.mongodb.net:27017,ac-9cnkrjh-shard-00-02.vba8ve3.mongodb.net:27017/?ssl=true&replicaSet=atlas-d7ewo6-shard-0&authSource=admin&retryWrites=true&w=majority`;
 
@@ -31,6 +35,10 @@ class Config {
     this.CLOUD_NAME = process.env.CLOUD_NAME || '';
     this.CLOUD_API_KEY = process.env.CLOUD_API_KEY || '';
     this.CLOUD_API_SECRET = process.env.CLOUD_API_SECRET || '';
+    this.EMAIL = process.env.EMAIL || '';
+    this.MAIL_PASSWORD = process.env.MAIL_PASSWORD || '';
+    this.SMTP_USER = process.env.SMTP_USER || '';
+    this.SMTP_PASSWORD = process.env.SMTP_PASSWORD || '';
   }
 
   public createLogger(name: string): bunyan {

@@ -16,7 +16,7 @@ export class SignIn {
     const { username, password } = req.body;
     const existingUser: IAuthDocument = await authService.getAuthUserByUsername(username);
     if (!existingUser) {
-      throw new BadRequestError('User already exists.');
+      throw new BadRequestError('Invalid credentials');
     }
 
     const passwordsMatch: boolean = await existingUser.comparePassword(password);

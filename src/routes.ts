@@ -1,5 +1,6 @@
 import { Application } from 'express';
 import { authRoutes } from '@auth/routes/authRoutes';
+import { postRoutes } from '@post/routes/postRoutes';
 import { serverAdapter } from '@service/queues/base.queue';
 import { authMiddleware } from '@global/helpers/auth-middleware';
 import { currentUserRoutes } from '@auth/routes/currentUserRoutes';
@@ -11,6 +12,7 @@ export default (app: Application) => {
     app.use('/queues', serverAdapter.getRouter()); // this is only for check GUI of MQ
     app.use(BASE_PATH, authRoutes.getRouter());
     app.use(BASE_PATH, authMiddleware.verifyUser, currentUserRoutes.getRouter());
+    app.use(BASE_PATH, authMiddleware.verifyUser, postRoutes.getRouter());
   };
   routes();
 };

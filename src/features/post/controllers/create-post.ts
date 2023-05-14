@@ -61,7 +61,7 @@ export class Create {
   public async postWithImage(req: Request, res: Response): Promise<void> {
     const { post, bgColor, privacy, gifUrl, profilePicture, feelings, image } = req.body;
 
-    const result: UploadApiResponse = (await uploads(image)) as UploadApiResponse;
+    const result: UploadApiResponse = (await uploads(image, `SnsApp/post/${req.currentUser!.userId}`)) as UploadApiResponse;
     if (!result?.public_id) {
       throw new BadRequestError(result.message);
     }

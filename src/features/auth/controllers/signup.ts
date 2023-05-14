@@ -40,14 +40,14 @@ export class SignUp {
       avatarColor
     });
 
-    const result: UploadApiResponse = (await uploads(avatarImage, 'SnsApp-profileImage', `${userObjectId}`)) as UploadApiResponse;
+    const result: UploadApiResponse = (await uploads(avatarImage, 'SnsApp/profileImage', `${userObjectId}`)) as UploadApiResponse;
     if (!result?.public_id) {
       throw new BadRequestError('File upload: Error occurred. Try again.');
     }
 
     // Add to redis cache
     const userDataForCache: IUserDocument = this.userData(authData, userObjectId);
-    userDataForCache.profilePicture = `https://res.cloudinary.com/${config.CLOUD_NAME}/image/upload/v${result.version}/SnsApp-profileImage/${userObjectId}`;
+    userDataForCache.profilePicture = `https://res.cloudinary.com/${config.CLOUD_NAME}/image/upload/v${result.version}/SnsApp/profileImage/${userObjectId}`;
     await userCache.saveUserToCache(`${userObjectId}`, uId, userDataForCache);
 
     // Add to database
